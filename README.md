@@ -1,1 +1,1 @@
-# Basta. Best uwsi framework
+# Basta. Best wsgi framework
