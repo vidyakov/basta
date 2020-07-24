@@ -1,9 +1,8 @@
-from jinja2 import Template, Environment, BaseLoader
+from jinja2 import Environment, FileSystemLoader
+
+from .config import TEMPLATES_PATH
 
 
 def render(template_name, **kwargs):
-    with open(template_name, 'r', encoding='utf-8') as file:
-        template = Template(file.read())
-
-    template = Environment(loader=BaseLoader()).from_string(template)
+    template = Environment(loader=FileSystemLoader(TEMPLATES_PATH)).get_template(template_name)
     return template.render(**kwargs).encode('utf-8')
