@@ -1,29 +1,36 @@
-from .controllers import code_404, redirect_without_slash
+from .controllers.page import PageNotFound
+from .controllers.front import RedirectWithoutSlash
+from .http import Request
+
+
+DEFAULT_FRONTS = [RedirectWithoutSlash()]
 
 
 class Basta:
-    def __init__(self, routes: dict, fronts: list = []):
-        self.routes = routes
-        self.fronts = fronts
+    def __init__(self, routes=None, fronts=None):
+        self.routes = routes if routes else {}
+        self.fronts = fronts + DEFAULT_FRONTS if fronts else DEFAULT_FRONTS
 
-    def _get_controller(self, request):
-        path = request.get('PATH_INFO')
-
-        if path[-1] != '/':
-            return redirect_without_slash
-        if controller := self.routes.get(path):
-            return controller
-        return code_404
-
-    def _get_response(self) -> list:
-        response = []
+    def _process_request(self, request):
         for front in self.fronts:
-            front(response)
-        return response
+            if response := front(request=request):
+                return response
 
-    def __call__(self, request: dict, start_response):
-        controller = self._get_controller(request)
-        status_code, response_headers, body = controller(request)
-        response_headers.extend(self._get_response())
-        start_response(status_code, response_headers)
-        return body,
+    def _get_controller(self, request: Request):
+        return self.routes.get(request.path, PageNotFound())
+
+    def _process_response(self, response):
+        for front in self.fronts:
+            front(response=response)
+
+    def __call__(self, env: dict, start_response):
+        request = Request(env)
+        response = self._process_request(request)
+
+        if not response:
+            controller = self._get_controller(request)
+            response = controller(request)
+            self._process_response(response)
+
+        start_response(response.status, response.headers)
+        return response.body

@@ -1,6 +1,6 @@
 from os.path import abspath
 
 
-TEMPLATES_PATH = abspath('templates')
-
 ENCODING = 'utf-8'
+
+TEMPLATES_PATH = abspath('templates')

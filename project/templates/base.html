@@ -2,10 +2,33 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>{% block title %}{% endblock %}</title>
+    <title>{% block title %}{% endblock title %}</title>
 </head>
 <body>
+<header>
+    <div class="wrapper">
+        <nav>
+            <div class="logo">
+                <h1>Basta</h1>
+                <span>Best wsgi framework</span>
+            </div>
+            <ul>
+                {% for menu_item in menu %}
+                <li>
+                    <a href="{{ menu_item.link }}">{{ menu_item.name }}</a>
+                </li>
+                {% endfor %}
+            </ul>
+        </nav>
+        <hr>
+    </div>
+</header>
+<main>
     {% block content %}
     {% endblock content %}
+</main>
+<footer>
+
+</footer>
 </body>
 </html>

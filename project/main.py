@@ -1,6 +1,6 @@
 from basta import Basta
 
-from routes import routes
+from controllers import ROUTES
 
 
-application = Basta(routes, [])
+application = Basta(ROUTES)

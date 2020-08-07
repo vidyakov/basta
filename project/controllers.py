@@ -1,16 +1,30 @@
-from basta.controllers import redirect
-from basta.utils import render, get_post_data, get_request_method
+from basta.controllers.page import Page
+from basta.utils.requests import get_post_data
+from basta.utils.urls import redirect
 
 
-def index_page(request) -> (str, list, bytes):
+class PageWithCommonContextData(Page):
+    def get_context_data(self) -> dict:
+        menu = [
+                {'name': 'index page', 'link': '/'},
+                {'name': 'contact page', 'link': '/contact/'},
+            ]
+        return {'menu': menu}
+
+
+class IndexPage(PageWithCommonContextData):
     template_name = 'index.html'
-    return '200 OK', [], render(template_name, title='Index page')
 
 
-def contact_page(request) -> (str, list, bytes):
-    if get_request_method(request) == 'GET':
-        return '200 OK', [], render('contact.html', title='Contact page')
+class ContactPage(PageWithCommonContextData):
+    template_name = 'contact.html'
 
-    data = get_post_data(request)
-    print(f'Name: {data.get("name")}\nEmail: {data.get("email")}')
-    return redirect('/')
+    def post(self):
+        print(get_post_data(self.request))
+        return redirect('/')
+
+
+ROUTES = {
+    '/': IndexPage(),
+    '/contact/': ContactPage()
+}
