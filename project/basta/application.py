@@ -1,14 +1,15 @@
 from .controllers.page import PageNotFound
 from .controllers.front import RedirectWithoutSlash
 from .http import Request
+from .utils.meta import Singleton
 
 
 DEFAULT_FRONTS = [RedirectWithoutSlash()]
 
 
-class Basta:
-    def __init__(self, routes=None, fronts=None):
-        self.routes = routes if routes else {}
+class Basta(metaclass=Singleton):
+    def __init__(self, routes=None, fronts=None, config=None):
+        self.routes = routes or {}
         self.fronts = fronts + DEFAULT_FRONTS if fronts else DEFAULT_FRONTS
 
     def _process_request(self, request):

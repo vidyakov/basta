@@ -1,0 +1,16 @@
+{% extends 'admin_panel.html' %}
+
+
+{% block title %}Create category{% endblock title %}
+
+{% block admin_content %}
+<section class="create_category">
+    <h1>Create category</h1>
+    <form method="post">
+        <label>Category name: <input type="text" name="name"></label>
+        <br>
+
+        <input type="submit" value="Save category">
+    </form>
+</section>
+{% endblock admin_content %}

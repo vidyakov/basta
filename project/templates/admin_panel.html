@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+
+{% block title %}Admin panel{% endblock title %}
+
+{% block content %}
+<section class="admin-commands">
+    <ul class="commands-list">
+    {% for command in commands %}
+        <li><a href="{{ command.link }}">{{ command.name }}</a></li>
+    {% endfor %}
+    </ul>
+</section>
+<hr>
+
+{% block admin_content %}
+{% endblock admin_content %}
+
+{% endblock content %}
