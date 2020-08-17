@@ -55,13 +55,16 @@ class Basta(AbstractApplication, metaclass=Singleton):
         return self.response.body
 
 
-class BastaWithLogger(Basta):
+class BastaWithLogger(AbstractApplication, metaclass=Singleton):
+    def __init__(self, apps=None):
+        self.application = Basta(apps)
+
     @staticmethod
     def _log_request(env):
         request = Request(env)
-        message = f'REQUEST TIME:{time.time()} METHOD:{request.method} QUERY_STRING: {request.query_string}'
+        message = f'REQUEST TIME: {time.time()} METHOD: {request.method} QUERY_STRING: {request.query_string}'
         cprint(message, 'red')
 
     def __call__(self, env: dict, start_response):
         self._log_request(env)
-        return super().__call__(env, start_response)
+        return self.application(env, start_response)
