@@ -1,9 +1,13 @@
+from basta import App
 from basta.controllers.page import Page
 from basta.utils.requests import get_post_data
 from basta.utils.urls import redirect
 
 from mainapp.models import Course, Category
 from mainapp.controllers import courses, categories
+
+
+admin_app = App(url_prefix='/admin')
 
 
 class PageWithCommonContextData(Page):
@@ -20,10 +24,12 @@ class PageWithCommonContextData(Page):
         return {'commands': commands, 'menu': menu}
 
 
+@admin_app.route('')
 class AdminPanel(PageWithCommonContextData):
     template_name = 'admin_panel.html'
 
 
+@admin_app.route('/new_course')
 class CreateCourse(PageWithCommonContextData):
     template_name = 'create_course.html'
 
@@ -38,6 +44,7 @@ class CreateCourse(PageWithCommonContextData):
         return redirect('/admin/')
 
 
+@admin_app.route('/new_category')
 class CreateCategory(PageWithCommonContextData):
     template_name = 'create_category.html'
 

@@ -1,5 +1,6 @@
+from basta import App
 from basta.controllers.page import Page
-from basta.utils.log import Logger
+from basta.utils.log import Logger, debug
 from basta.utils.requests import get_post_data
 from basta.utils.urls import redirect
 
@@ -18,6 +19,9 @@ courses = [Course(*params) for params in zip(names, prices, descs)]
 logger = Logger('mainapp', 'logs')
 
 
+main_app = App()
+
+
 class PageWithCommonContextData(Page):
     def get_context_data(self) -> dict:
         menu = (
@@ -28,6 +32,7 @@ class PageWithCommonContextData(Page):
         return {'menu': menu}
 
 
+@main_app.route('')
 class IndexPage(PageWithCommonContextData):
     template_name = 'index.html'
 
@@ -37,9 +42,13 @@ class IndexPage(PageWithCommonContextData):
         return {**general_data, 'courses': courses, 'categories': categories}
 
 
+@main_app.route('/contact')
 class ContactPage(PageWithCommonContextData):
     template_name = 'contact.html'
 
+    @debug
     def post(self):
         print(get_post_data(self.request))
         return redirect('/')
+
+

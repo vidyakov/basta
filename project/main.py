@@ -1,13 +1,7 @@
 from basta import Basta
 
-from mainapp.routes import MAINAPP_ROUTES
-from adminapp.routes import ADMIN_ROUTES
+from mainapp import main_app
+from adminapp import admin_app
 
 
-ROUTES = {
-    **MAINAPP_ROUTES,
-    **ADMIN_ROUTES
-}
-
-
-application = Basta(ROUTES)
+application = Basta([main_app, admin_app])

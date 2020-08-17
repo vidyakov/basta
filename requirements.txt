@@ -1,3 +1,4 @@
+termcolor
 gunicorn
 Jinja2==2.11.2
 

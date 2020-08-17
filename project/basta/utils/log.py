@@ -1,3 +1,4 @@
+import time
 from datetime import datetime
 
 from termcolor import cprint
@@ -44,3 +45,14 @@ class Logger:
                 return result
             return wrapper
         return decorator
+
+
+def debug(func):
+    def wrapper(*args, **kwargs):
+        start = time.time()
+        result = func(*args, **kwargs)
+        end = time.time()
+
+        cprint(f'{func.__name__} {end - start}', 'red')
+        return result
+    return wrapper
